@@ -70,7 +70,7 @@ if (process.env.NODE_ENV === 'production') {
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: ["http://localhost:5173", "http://localhost:5174", "https://virtual-classroom-admin.vercel.app", "https://virtual-classroom-application.vercel.app"],
+    origin: ["http://localhost:5173", "http://localhost:5174", "http://128.199.21.237:4173", "http://128.199.21.237:4174", "https://virtual-classroom-admin.vercel.app", "https://virtual-classroom-application.vercel.app"],
     methods: ["GET", "POST"],
     credentials: true
   },
