@@ -17,7 +17,7 @@ limitations under the License.
 
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({ port: process.env.WS_PORT || 8082 });
 const clients = new Set();
 
 wss.on('connection', (ws) => {
