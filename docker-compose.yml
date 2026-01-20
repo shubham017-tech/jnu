@@ -1,0 +1,21 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://db:27017/edumatrix
+      # Add other environment variables here from your .env file
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: mongo:latest
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+
+volumes:
+  mongo_data:

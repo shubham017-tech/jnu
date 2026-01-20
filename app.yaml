@@ -1,0 +1,29 @@
+name: jnu-virtual-classroom
+region: nyc
+services:
+  - name: server
+    environment_slug: node-js
+    github:
+      branch: development
+      deploy_on_push: true
+      repo: shubham017-tech/jnu
+    http_port: 3000
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    run_command: npm run start --prefix server
+    build_command: |
+      npm install --prefix client && npm run build --prefix client
+      npm install --prefix admin && npm run build --prefix admin
+      npm install --prefix server
+    envs:
+      - key: NODE_ENV
+        scope: RUN_AND_BUILD_TIME
+        value: production
+      - key: MONGO_URI
+        scope: RUN_TIME
+        value: ${db.DATABASE_URL}
+databases:
+  - engine: MONGODB
+    name: db
+    num_nodes: 1
+    size_slug: mongodb-v2-dev
