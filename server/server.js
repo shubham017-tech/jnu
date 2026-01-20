@@ -53,7 +53,7 @@ const app = express();
 connectDb(); // Connect database
 connectCloudinary(); // Initialize Cloudinary
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:8081", "https://virtual-classroom-admin.vercel.app", "https://virtual-classroom-application.vercel.app"],
+  origin: ["http://localhost:5173", "http://128.199.21.237:4173", "http://128.199.21.237:4174", "http://localhost:5174", "http://localhost:8081", "https://virtual-classroom-admin.vercel.app", "https://virtual-classroom-application.vercel.app"],
   credentials: true
 }));
 app.use(express.json());
