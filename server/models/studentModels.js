@@ -15,20 +15,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const mongoose = require("mongoose");
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../db/db");
 
-const studentSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  rollNo: { type: Number, required: true },
-  fatherName: { type: String, required: true },
-  phoneNo: { type: String, required: true },
-  batch: { type: String, required: true },
-  branch: { type: String, required: true },
-  avatar: { type: String, required: true }, // Single avatar URL
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, default: "student" },
+const Student = sequelize.define("student", {
+  name: { type: DataTypes.STRING, allowNull: false },
+  rollNo: { type: DataTypes.INTEGER, allowNull: false },
+  fatherName: { type: DataTypes.STRING, allowNull: false },
+  phoneNo: { type: DataTypes.STRING, allowNull: false },
+  batch: { type: DataTypes.STRING, allowNull: false },
+  branch: { type: DataTypes.STRING, allowNull: false },
+  avatar: { type: DataTypes.STRING, allowNull: false },
+  email: { type: DataTypes.STRING, allowNull: false, unique: true },
+  password: { type: DataTypes.STRING, allowNull: false },
+  role: { type: DataTypes.STRING, defaultValue: "student" },
+}, {
+  timestamps: true
 });
 
-const Student = mongoose.model("student", studentSchema);
 module.exports = Student;

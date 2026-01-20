@@ -7,14 +7,13 @@ const payfees = async (req, res) => {
   const frontend_url = "http://localhost:5174";
   try {
     const { studentId, amount, rollno, email, year } = req.body;
-    const feesObject = new FeesModel({
+    const feesObject = await FeesModel.create({
       studentId,
       amount,
       rollno,
       email,
       year,
     });
-    await feesObject.save();
     const line_items = [
       {
         price_data: {
@@ -42,8 +41,8 @@ const payfees = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       line_items,
       mode: "payment",
-      success_url: `${frontend_url}/verify?success=true&paymentId=${feesObject._id}`,
-      cancel_url: `${frontend_url}/verify?success=false&paymentId=${feesObject._id}`,
+      success_url: `${frontend_url}/verify?success=true&paymentId=${feesObject.id}`,
+      cancel_url: `${frontend_url}/verify?success=false&paymentId=${feesObject.id}`,
     });
     res.json({
       success: true,
@@ -63,10 +62,10 @@ const verifyPayment = async (req, res) => {
     const { paymentId, success } = req.body;
 
     if (success == "true") {
-      await FeesModel.findByIdAndUpdate(paymentId, { payment: "paid" });
+      await FeesModel.update({ status: "paid" }, { where: { id: paymentId } });
       res.json({ success: true, message: "paid" });
     } else {
-      await FeesModel.findByIdAndDelete(paymentId);
+      await FeesModel.destroy({ where: { id: paymentId } });
       res.json({
         success: false,
         message: "not paid",

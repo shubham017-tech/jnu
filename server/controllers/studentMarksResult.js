@@ -1,15 +1,15 @@
 const StudentMarksAttendance = require('../models/student_marks_attendance');
 
 
-const StudentMarksController = async(req,res)=>{
+const StudentMarksController = async (req, res) => {
     const { RollNumber, Name, Marks, Attendance, Year, Section } = req.body;
-    try{
+    try {
 
-        const student = await StudentMarksAttendance.findOne({RollNumber});
-        if(student){
+        const student = await StudentMarksAttendance.findOne({ where: { RollNumber } });
+        if (student) {
             return res.status(500).json({
-                success:false,
-                message:"Student data already uploaded"
+                success: false,
+                message: "Student data already uploaded"
             })
         }
 
@@ -27,13 +27,13 @@ const StudentMarksController = async(req,res)=>{
             studentdetail,
             message: "Student data uploaded successfully",
         })
-    }catch(error){
+    } catch (error) {
         return res.status(500).json({
             success: false,
             message: "Some error occured on server side",
         })
     }
 };
-            
 
-module.exports=StudentMarksController;
+
+module.exports = StudentMarksController;

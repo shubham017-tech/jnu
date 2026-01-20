@@ -30,7 +30,7 @@ const postAssignment = async (req, res) => {
       });
     }
 
-    const existingAssignment = await Assignment.findOne({ title });
+    const existingAssignment = await Assignment.findOne({ where: { title } });
     if (existingAssignment) {
       return res.status(409).json({
         success: false,
@@ -88,7 +88,7 @@ const postAssignment = async (req, res) => {
 // code for getting the assignment in the student server
 const getAssignment = async (req, res) => {
   try {
-    const studentAssignment = await Assignment.find();
+    const studentAssignment = await Assignment.findAll();
 
     if (!studentAssignment) {
       return res.status(404).json({
@@ -98,9 +98,9 @@ const getAssignment = async (req, res) => {
     }
 
     return res.status(200).json({
-        success:true,
-        studentAssignment,
-      })
+      success: true,
+      studentAssignment,
+    })
 
   } catch (error) {
     return res.status(500).json({
@@ -114,7 +114,7 @@ const getAssignment = async (req, res) => {
 const deleteAssignment = async (req, res) => {
   try {
     const assignmentId = req.params.id;
-    const delAssignment = await Assignment.findByIdAndDelete(assignmentId);
+    const delAssignment = await Assignment.destroy({ where: { id: assignmentId } });
 
     if (!delAssignment) {
       return res.status(404).json({

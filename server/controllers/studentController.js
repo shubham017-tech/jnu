@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 
+const { Op } = require("sequelize");
 const Student = require("../models/studentModels");
 const bcrypt = require("bcrypt");
 const cloudinary = require("cloudinary").v2;
@@ -43,7 +44,9 @@ const enrollStudent = async (req, res) => {
 
     // Validate if student already exists
     const existingStudent = await Student.findOne({
-      $or: [{ rollNo }, { email }],
+      where: {
+        [Op.or]: [{ rollNo }, { email }],
+      },
     });
     if (existingStudent) {
       return res.status(400).json({
@@ -109,45 +112,45 @@ const enrollStudent = async (req, res) => {
 };
 
 // Now writing code for showing details of the students
-const getStudents = async(req,res)=>{
-try{
-  const studentdetails = await Student.find();
+const getStudents = async (req, res) => {
+  try {
+    const studentdetails = await Student.findAll();
 
-  return res.status(200).json({
-    success:true,
-    studentdetails,
-    message:"Here are the details of the students",
-  })
-}
-catch(error){
-  return res.status(500).json({
-    success:false,
-    message:"Some error occured on fetching the student details"
-  })
-}
+    return res.status(200).json({
+      success: true,
+      studentdetails,
+      message: "Here are the details of the students",
+    })
+  }
+  catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Some error occured on fetching the student details"
+    })
+  }
 
 }
-const getStudentById = async(req,res)=>{
-  try{
-    const {studentId} = req.body;
-    const studentdetails = await Student.findById(studentId);
-    if(!studentdetails){
+const getStudentById = async (req, res) => {
+  try {
+    const { studentId } = req.body;
+    const studentdetails = await Student.findByPk(studentId);
+    if (!studentdetails) {
       return res.status(404).json({
-        success:false,
-        message:"Student not found"
+        success: false,
+        message: "Student not found"
       })
     }
     return res.json({
-      success:true,
+      success: true,
       studentdetails,
-      message:"Here are the details of the student",
+      message: "Here are the details of the student",
     })
-  }catch(error){
+  } catch (error) {
     return res.status(500).json({
-      success:false,
-      message:"Some error occured on fetching the student details"
+      success: false,
+      message: "Some error occured on fetching the student details"
     })
   }
 }
 
-module.exports = { enrollStudent ,getStudents,getStudentById};
+module.exports = { enrollStudent, getStudents, getStudentById };

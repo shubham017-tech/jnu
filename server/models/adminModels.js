@@ -16,37 +16,37 @@ limitations under the License.
 */
 
 
-const mongoose = require("mongoose");
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../db/db");
 
-const adminSchema = new mongoose.Schema({
+const Admin = sequelize.define("admin", {
   directorName: {
-    type: String,
-    required: true,
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   collegeName: {
-    type: String,
-    required: true,
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   email: {
-    type: String,
-    required: true,
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
   },
-  centerCode:{
-    type:Number,
-    required:true
+  centerCode: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   },
-  
   password: {
-    type: String,
-    required: true,
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-  role:{
-    type:String,
-    enum:['Registrar','Director','Teacher'],
-    default:'Director'
+  role: {
+    type: DataTypes.ENUM('Registrar', 'Director', 'Teacher'),
+    defaultValue: 'Director'
   }
+}, {
+  timestamps: true
 });
-
-const Admin = mongoose.model("admin", adminSchema);
 
 module.exports = Admin;

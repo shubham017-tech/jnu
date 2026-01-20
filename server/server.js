@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 const express = require('express');
-const connectDb = require('./db/db');
+const { connectDB } = require('./db/db');
 const path = require('path');
 const cors = require('cors');
 const http = require('http');
@@ -50,7 +50,7 @@ const { paymentRouter } = require('./routes/paymentRoutes');
 
 // Initialize Express app and setup middlewares
 const app = express();
-connectDb(); // Connect database
+connectDB(); // Connect database
 connectCloudinary(); // Initialize Cloudinary
 app.use(cors({
   origin: ["http://localhost:5173", "http://128.199.21.237:4173", "http://128.199.21.237:4174", "http://localhost:5174", "http://localhost:8081", "https://virtual-classroom-admin.vercel.app", "https://virtual-classroom-application.vercel.app"],

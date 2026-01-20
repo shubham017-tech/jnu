@@ -1,16 +1,16 @@
 const registrarFeesModel = require("../models/registrarFees");
 
 
-const registrarFeesController = async(req,res)=>{
-    const {RollNumber,Name,Fees,Fees_status,Branch} = req.body;
+const registrarFeesController = async (req, res) => {
+    const { RollNumber, Name, Fees, Fees_status, Branch } = req.body;
 
-    try{
-       
-        const student = await registrarFeesModel.findOne({RollNumber});
-        if(student){
+    try {
+
+        const student = await registrarFeesModel.findOne({ where: { RollNumber } });
+        if (student) {
             return res.status(500).json({
-                success:false,
-                message:"Student data already uploaded"
+                success: false,
+                message: "Student data already uploaded"
             })
         }
 
@@ -27,7 +27,7 @@ const registrarFeesController = async(req,res)=>{
             studentdetail,
             message: "Student data uploaded successfully",
         })
-    }catch(error){
+    } catch (error) {
         console.log(error)
         return res.status(500).json({
             success: false,

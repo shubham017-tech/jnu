@@ -1,27 +1,29 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../db/db");
 
-const registrarFeesSchema = new mongoose.Schema({
-   RollNumber:{
-    type:Number,
-    required:true
+const registrarFeesModel = sequelize.define("registrarFees", {
+   RollNumber: {
+      type: DataTypes.INTEGER,
+      allowNull: false
    },
-   Name:{
-    type:String,
-    required:true
+   Name: {
+      type: DataTypes.STRING,
+      allowNull: false
    },
-   Fees:{
-    type:Number,
-    required:true
+   Fees: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false
    },
-   Fees_status:{
-    type:String,
-    required:true
+   Fees_status: {
+      type: DataTypes.STRING,
+      allowNull: false
    },
-   Branch:{
-    type:String,
-    required:true
+   Branch: {
+      type: DataTypes.STRING,
+      allowNull: false
    }
-})
-const registrarFeesModel = mongoose.model("registrarFees", registrarFeesSchema);
+}, {
+   timestamps: true
+});
 
-module.exports=registrarFeesModel;
+module.exports = registrarFeesModel;

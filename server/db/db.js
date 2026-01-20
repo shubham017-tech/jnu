@@ -1,30 +1,36 @@
-/*
+require('dotenv').config();
+const { Sequelize } = require('sequelize');
 
-Copyright 2024 Himanshu Dinkar
+const sequelize = new Sequelize(
+    process.env.DB_NAME,
+    process.env.DB_USERNAME,
+    process.env.DB_PASSWORD,
+    {
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        dialect: 'postgres',
+        logging: false,
+    }
+);
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
-const mongoose = require('mongoose');
+console.log('DEBUG DB VARS:');
+console.log('NAME:', process.env.DB_NAME);
+console.log('USER:', process.env.DB_USERNAME);
+console.log('PASS:', process.env.DB_PASSWORD ? 'REDACTED (length: ' + process.env.DB_PASSWORD.length + ')' : 'MISSING');
+console.log('HOST:', process.env.DB_HOST);
+console.log('PORT:', process.env.DB_PORT);
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log('Database successfully connected');
+        await sequelize.authenticate();
+        console.log('PostgreSQL Database successfully connected');
+
+        // Sync models to create tables if they don't exist
+        await sequelize.sync({ alter: true });
+        console.log('Database tables synchronized');
     } catch (error) {
-        console.error("Error connecting to the Database:", error.message);
-        // Do not try to use res here as it might be called on startup
+        console.error("Error connecting to the PostgreSQL Database:", error.message);
     }
 }
 
-module.exports = connectDB;
+module.exports = { connectDB, sequelize };

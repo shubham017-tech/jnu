@@ -1,33 +1,25 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../db/db");
 
-
-const studentMarksAttendanceSchema = new mongoose.Schema({
-    RollNumber:{
-        type:Number,
-        required:true
+const StudentMarksAttendance = sequelize.define("student_marks_attendance", {
+    studentId: {
+        type: DataTypes.INTEGER,
+        // Note: Relationships will be defined separately
     },
-    Name:{
-        type:String,
-        required:true
+    subject: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    Marks:{
-        type:Number,
-        required:true
+    marks: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
     },
-    Attendance:{
-        type:Number,
-        required:true
-    },
-    Section:{
-        type:String,
-        required:true
-    },
-    Year:{
-        type:Number,
-        required:true
+    attendance: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
     }
+}, {
+    timestamps: true
 });
-
-const StudentMarksAttendance = mongoose.model('StudentMarksAttendance', studentMarksAttendanceSchema);
 
 module.exports = StudentMarksAttendance;

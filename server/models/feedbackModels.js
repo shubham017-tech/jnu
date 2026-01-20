@@ -1,21 +1,21 @@
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../db/db');
 
-const mongoose = require('mongoose');
-
-
-const feedbackSchema = new mongoose.Schema({
-    fullName:{
-        type:String,
-        required:true
+const Feedback = sequelize.define('feedback', {
+    fullName: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    email:{
-        type:String,
-        required:true
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    description:{
-        type:String,
-        required:true
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: false
     }
-})
+}, {
+    timestamps: true
+});
 
-const Feedback = mongoose.model('feedback',feedbackSchema);
 module.exports = Feedback;

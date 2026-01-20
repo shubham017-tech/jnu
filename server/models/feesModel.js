@@ -1,29 +1,33 @@
-const mongoose = require('mongoose');
-const feesSchema = new mongoose.Schema({
-  studentId:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:'Student'
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../db/db');
+
+const FeesModel = sequelize.define('Fees', {
+  studentId: {
+    type: DataTypes.INTEGER,
+    // Note: Relationships will be defined in a separate associations file or later
   },
-  email:{
-    type:String,
-    required:true
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
-  rollno:{
-    type:String,
-    required:true
+  rollno: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
-  amount:{
-    type:Number,
-    required:true
+  amount: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false
   },
-  status:{
-    type:String,
-    enum:['paid','unpaid'],
-    default:'unpaid'
-  },year:{
-    type:Number,
-    required:true
+  status: {
+    type: DataTypes.ENUM('paid', 'unpaid'),
+    defaultValue: 'unpaid'
+  },
+  year: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   }
-})
-const FeesModel = mongoose.model('Fees', feesSchema);
+}, {
+  timestamps: true
+});
+
 module.exports = FeesModel;

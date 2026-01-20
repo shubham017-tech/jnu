@@ -17,12 +17,22 @@ limitations under the License.
 
 const cloudinary = require('cloudinary').v2;
 
-const connectCloudinary = async()=>{
+const connectCloudinary = async () => {
+    const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
+
+    if (!CLOUDINARY_CLOUD_NAME || CLOUDINARY_CLOUD_NAME === 'your_cloud_name' ||
+        !CLOUDINARY_API_KEY || CLOUDINARY_API_KEY === 'your_api_key' ||
+        !CLOUDINARY_API_SECRET || CLOUDINARY_API_SECRET === 'your_api_secret') {
+        console.warn('WARNING: Cloudinary is not properly configured. Avatar uploads will fail.');
+        console.warn('Please update CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in your .env file.');
+    }
+
     cloudinary.config({
-        cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
-        api_key:process.env.CLOUDINARY_API_KEY,
-        api_secret:process.env.CLOUDINARY_API_SECRET,
-    })
+        cloud_name: CLOUDINARY_CLOUD_NAME,
+        api_key: CLOUDINARY_API_KEY,
+        api_secret: CLOUDINARY_API_SECRET,
+    });
+    console.log('Cloudinary configuration initialized');
 }
 
-module.exports=connectCloudinary;
+module.exports = connectCloudinary;

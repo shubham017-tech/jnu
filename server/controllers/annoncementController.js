@@ -60,23 +60,23 @@ const announcement = async (req, res) => {
     }
 };
 
-const displayAnnouncement = async (req, res) => { 
+const displayAnnouncement = async (req, res) => {
     try {
-        const getAnnouncement = await Announcement.find()
-            
+        const getAnnouncement = await Announcement.findAll()
+
 
         return res.status(200).json({
             success: true,
             getAnnouncement,
             message: "Announcements successfully retrieved",
-            
+
         });
     } catch (error) {
         console.error('Announcement retrieval error:', error);
         return res.status(500).json({
             success: false,
             message: "Error retrieving announcements",
-        
+
         });
     }
 };

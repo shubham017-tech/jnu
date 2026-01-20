@@ -24,20 +24,24 @@ const collegeRegister = async (req, res) => {
     let { directorName, collegeName, email, centerCode, password, role } = req.body;
     if (!role || role === "choose") role = "Director";
     try {
-        const existingCollege = await Admin.findOne({ email });
-        const existingCollegeName = await Admin.findOne({ collegeName });
+        const existingCollege = await Admin.findOne({ where: { email } });
+        const existingCollegeName = await Admin.findOne({ where: { collegeName } });
+
         if (existingCollegeName) {
+            console.log(`Registration Collision: College "${collegeName}" already exists with ID: ${existingCollegeName.id}`);
             return res.status(409).json({
                 success: false,
-                message: " Your college is already registered with another id"
+                message: " Your college is already registered with another id",
+                debugInfo: process.env.NODE_ENV === 'development' ? `Found existing college with ID: ${existingCollegeName.id}` : undefined
             });
         }
         if (existingCollege) {
+            console.log(`Registration Collision: Email "${email}" already exists with ID: ${existingCollege.id}`);
             return res.status(409).json({
                 success: false,
-                message: "Your college already exists"
-            })
-
+                message: "Your college already exists",
+                debugInfo: process.env.NODE_ENV === 'development' ? `Found existing email with ID: ${existingCollege.id}` : undefined
+            });
         }
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(password, salt);
@@ -73,7 +77,7 @@ const collegeRegister = async (req, res) => {
 const collegeLogin = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const college = await Admin.findOne({ email });
+        const college = await Admin.findOne({ where: { email } });
         if (!college) {
             return res.status(400).json({
                 success: false,
@@ -92,7 +96,7 @@ const collegeLogin = async (req, res) => {
 
         }
 
-        const token = jwt.sign({ email: email, collegeId: college._id, role: college.role },
+        const token = jwt.sign({ email: email, collegeId: college.id, role: college.role },
             process.env.JWT_SECRET
 
         );

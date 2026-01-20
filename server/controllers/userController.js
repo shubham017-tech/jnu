@@ -24,7 +24,7 @@ const jwt = require("jsonwebtoken");
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await Students.findOne({ email });
+    const user = await Students.findOne({ where: { email } });
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -39,9 +39,9 @@ const loginUser = async (req, res) => {
       });
     }
     const token = jwt.sign(
-      { email: email, userId: user._id },
+      { email: email, userId: user.id },
       process.env.JWT_SECRET
-     
+
     );
 
     res.cookie("token", token, {
@@ -62,4 +62,4 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = {  loginUser };
+module.exports = { loginUser };
