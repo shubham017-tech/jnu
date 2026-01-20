@@ -24,7 +24,7 @@ const { notifyClients } = require('../websockets/notifyClients');
 // Get all quizzes
 router.get('/quizzes', async (req, res) => {
   try {
-    const quizzes = await Quiz.find();
+    const quizzes = await Quiz.findAll();
     res.status(200).json(quizzes);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch quizzes' });
@@ -34,8 +34,7 @@ router.get('/quizzes', async (req, res) => {
 // Add a new quiz
 router.post('/quizzes', async (req, res) => {
   try {
-    const quiz = new Quiz(req.body);
-    await quiz.save();
+    const quiz = await Quiz.create(req.body);
 
     notifyClients(quiz); // Notify all connected clients
     res.status(201).json({ message: 'Quiz created successfully', quiz });

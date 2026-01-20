@@ -15,25 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const WebSocket = require('ws');
+let ioInstance = null;
 
-const wss = new WebSocket.Server({ port: process.env.WS_PORT || 8088 });
-const clients = new Set();
-
-wss.on('connection', (ws) => {
-  clients.add(ws);
-
-  ws.on('close', () => {
-    clients.delete(ws);
-  });
-});
-
-const notifyClients = (quiz) => {
-  clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(quiz));
-    }
-  });
+const initNotify = (io) => {
+  ioInstance = io;
 };
 
-module.exports = { notifyClients };
+const notifyClients = (quiz) => {
+  if (ioInstance) {
+    ioInstance.emit('newQuiz', quiz);
+    console.log('Notified clients via Socket.io about new quiz');
+  } else {
+    console.warn('notifyClients called before ioInstance was initialized');
+  }
+};
+
+module.exports = { notifyClients, initNotify };

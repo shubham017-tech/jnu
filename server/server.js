@@ -76,7 +76,10 @@ const io = socketIo(server, {
   },
 });
 
+const { initNotify } = require('./websockets/notifyClients');
+
 socketService(io);
+initNotify(io);
 
 // API routes
 

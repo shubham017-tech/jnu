@@ -36,6 +36,21 @@ const registrarFeesController = async (req, res) => {
     }
 }
 
+const getRegistrarFees = async (req, res) => {
+    try {
+        const feesData = await registrarFeesModel.findAll();
+        return res.status(200).json({
+            success: true,
+            feesData,
+            message: "Registrar fees data fetched successfully"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error fetching registrar fees data"
+        });
+    }
+}
 
 
-module.exports = registrarFeesController;
+module.exports = { registrarFeesController, getRegistrarFees };

@@ -35,5 +35,21 @@ const StudentMarksController = async (req, res) => {
     }
 };
 
+const getStudentMarks = async (req, res) => {
+    try {
+        const marksData = await StudentMarksAttendance.findAll();
+        return res.status(200).json({
+            success: true,
+            marksData,
+            message: "Student marks and attendance data fetched successfully"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error fetching marks data"
+        });
+    }
+}
 
-module.exports = StudentMarksController;
+
+module.exports = { StudentMarksController, getStudentMarks };

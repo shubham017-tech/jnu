@@ -13,13 +13,6 @@ const sequelize = new Sequelize(
     }
 );
 
-console.log('DEBUG DB VARS:');
-console.log('NAME:', process.env.DB_NAME);
-console.log('USER:', process.env.DB_USERNAME);
-console.log('PASS:', process.env.DB_PASSWORD ? 'REDACTED (length: ' + process.env.DB_PASSWORD.length + ')' : 'MISSING');
-console.log('HOST:', process.env.DB_HOST);
-console.log('PORT:', process.env.DB_PORT);
-
 const connectDB = async () => {
     try {
         await sequelize.authenticate();
