@@ -17,6 +17,7 @@ limitations under the License.
 
 import Signup from "./pages/Auth/SignUp.jsx";
 import { Routes, Route } from "react-router-dom";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import "./App.css";
 
 import { ToastContainer } from "react-toastify";
@@ -44,6 +45,16 @@ import TeachersNotes from "./Student Dashboard/Notes/TeachersNotes.jsx";
 import Payfees from "./Student Dashboard/Payment/Payfees.jsx";
 import Verify from "./Student Dashboard/Payment/Verify.jsx";
 import StudentLive from "./Student Dashboard/Live/StudentLive.jsx";
+import Documentation from "./pages/Resources/Documentation";
+import Tutorials from "./pages/Resources/Tutorials";
+import SupportCenter from "./pages/Resources/SupportCenter";
+import ApiReference from "./pages/Resources/ApiReference";
+import Careers from "./pages/Company/Careers";
+import NewsBlog from "./pages/Company/NewsBlog";
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
+import TermsOfService from "./pages/Legal/TermsOfService";
+import Security from "./pages/Legal/Security";
+import Compliance from "./pages/Legal/Compliance";
 
 // import ModalComponent from "./Modal/ModalComponent.jsx";
 
@@ -54,11 +65,12 @@ function App() {
 
       <ToastContainer />
       <PeerProvider>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<HomePage />} />
 
           <Route path="/signup" element={<Signup />} />
-       
+
           <Route path="/aboutUs" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/courses" element={<CoursesPage />} />
@@ -101,6 +113,17 @@ function App() {
             path="/live-class"
             element={<ProtectedRoute element={<StudentLive />} />}
           />
+          {/* Informational Pages */}
+          <Route path="/documentation" element={<Documentation />} />
+          <Route path="/tutorials" element={<Tutorials />} />
+          <Route path="/support-center" element={<SupportCenter />} />
+          <Route path="/api-reference" element={<ApiReference />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/news-blog" element={<NewsBlog />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/security" element={<Security />} />
+          <Route path="/compliance" element={<Compliance />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </PeerProvider>

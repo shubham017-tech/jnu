@@ -32,17 +32,17 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const FooterLink = ({ href, children }) => (
+const FooterLink = ({ to, children }) => (
   <motion.li
     whileHover={{ x: 5 }}
     whileTap={{ scale: 0.95 }}
   >
-    <a
-      href={href}
+    <Link
+      to={to}
       className="hover:text-white transition-colors duration-300 flex items-center gap-2"
     >
       {children}
-    </a>
+    </Link>
   </motion.li>
 );
 
@@ -85,22 +85,42 @@ const Footer = () => {
             </motion.div>
 
             <ul className="space-y-4">
-              <FooterLink href="mailto:info@jnujaipur.ac.in">
-                <Mail className="h-5 w-5 text-indigo-400" />
-                info@jnujaipur.ac.in
-              </FooterLink>
-              <FooterLink href="tel:18001021900">
-                <Phone className="w-4 h-4" />
-                Toll Free: 1800 102 1900
-              </FooterLink>
-              <FooterLink href="tel:01413127028">
-                <Phone className="w-4 h-4" />
-                Phone: 0141 3127028
-              </FooterLink>
-              <FooterLink href="#">
-                <MapPin className="w-4 h-4" />
-                Jaipur-Agra Bypass, Near New RTO Office, Jagatpura, Jaipur-302017
-              </FooterLink>
+              <motion.li
+                whileHover={{ x: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <a href="mailto:info@jnujaipur.ac.in" className="hover:text-white transition-colors duration-300 flex items-center gap-2">
+                  <Mail className="h-5 w-5 text-indigo-400" />
+                  info@jnujaipur.ac.in
+                </a>
+              </motion.li>
+              <motion.li
+                whileHover={{ x: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <a href="tel:18001021900" className="hover:text-white transition-colors duration-300 flex items-center gap-2">
+                  <Phone className="w-4 h-4" />
+                  Toll Free: 1800 102 1900
+                </a>
+              </motion.li>
+              <motion.li
+                whileHover={{ x: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <a href="tel:01413127028" className="hover:text-white transition-colors duration-300 flex items-center gap-2">
+                  <Phone className="w-4 h-4" />
+                  Phone: 0141 3127028
+                </a>
+              </motion.li>
+              <motion.li
+                whileHover={{ x: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <a href="#" className="hover:text-white transition-colors duration-300 flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  Jaipur-Agra Bypass, Near New RTO Office, Jagatpura, Jaipur-302017
+                </a>
+              </motion.li>
             </ul>
 
             {/* Social Links */}
@@ -117,10 +137,10 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-white mb-6">Resources</h3>
             <ul className="space-y-3">
-              <FooterLink href="#">Documentation</FooterLink>
-              <FooterLink href="#">Tutorials</FooterLink>
-              <FooterLink href="#">Support Center</FooterLink>
-              <FooterLink href="#">API Reference</FooterLink>
+              <FooterLink to="/documentation">Documentation</FooterLink>
+              <FooterLink to="/tutorials">Tutorials</FooterLink>
+              <FooterLink to="/support-center">Support Center</FooterLink>
+              <FooterLink to="/api-reference">API Reference</FooterLink>
             </ul>
           </div>
 
@@ -128,10 +148,10 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-white mb-6">Company</h3>
             <ul className="space-y-3">
-              <FooterLink href="#">About Us</FooterLink>
-              <FooterLink href="#">Careers</FooterLink>
-              <FooterLink href="#">News & Blog</FooterLink>
-              <FooterLink href="#">Contact Us</FooterLink>
+              <FooterLink to="/aboutUs">About Us</FooterLink>
+              <FooterLink to="/careers">Careers</FooterLink>
+              <FooterLink to="/news-blog">News & Blog</FooterLink>
+              <FooterLink to="/contact">Contact Us</FooterLink>
             </ul>
           </div>
 
@@ -139,13 +159,14 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-white mb-6">Legal</h3>
             <ul className="space-y-3">
-              <FooterLink href="#">Privacy Policy</FooterLink>
-              <FooterLink href="#">Terms of Service</FooterLink>
-              <FooterLink href="#">Security</FooterLink>
-              <FooterLink href="#">Compliance</FooterLink>
+              <FooterLink to="/privacy-policy">Privacy Policy</FooterLink>
+              <FooterLink to="/terms-of-service">Terms of Service</FooterLink>
+              <FooterLink to="/security">Security</FooterLink>
+              <FooterLink to="/compliance">Compliance</FooterLink>
             </ul>
           </div>
         </div>
+
 
         {/* Copyright Section */}
         <div className="mt-16 pt-8 border-t border-gray-800">
