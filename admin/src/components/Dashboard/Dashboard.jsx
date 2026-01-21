@@ -15,164 +15,141 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Loader } from "lucide-react";
+import React from "react";
+import {
+  BarChart,
+  TrendingUp,
+  Users,
+  Award,
+  CircleDollarSign,
+  Briefcase,
+  GraduationCap,
+  Activity
+} from "lucide-react";
 
-// Register the components
+const DataCard = ({ title, value, icon: Icon, color, trend }) => (
+  <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+    <div className="flex items-center justify-between mb-4">
+      <div className={`p-3 rounded-lg ${color} bg-opacity-10`}>
+        <Icon className={`h-6 w-6 ${color.replace('bg-', 'text-')}`} />
+      </div>
+      {trend && (
+        <span className={`text-sm font-medium ${trend.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+          {trend}
+        </span>
+      )}
+    </div>
+    <h3 className="text-gray-500 text-sm font-medium mb-1">{title}</h3>
+    <p className="text-2xl font-bold text-gray-800">{value}</p>
+  </div>
+);
 
 const Dashboard = () => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const [barplot1, setbarplot1] = useState("");
-  const [barplot2, setbarplot2] = useState("");
-  const [scatter, setScatter] = useState("");
-  const [topStudents, setTopStudents] = useState("");
-  const [pieplot, setPieplot] = useState("");
-  const [fees_status, setfees_status] = useState("");
-  const [placement_status, setplacement_status] = useState("");
-  const [branch_placement, setbranch_placement] = useState("");
-
-  useEffect(() => {
-    const fetchCharts = async () => {
-      try {
-        const response = await axios.get(`${backendUrl}/api/test`);
-        if (response.data.success) {
-          console.log(response.data.analysis);
-
-          setbarplot1(
-            `data:image/png;base64,${response.data.analysis.result.barplot1}`
-          );
-          setbarplot2(
-            `data:image/png;base64,${response.data.analysis.result.barplot2}`
-          );
-          setScatter(
-            `data:image/png;base64,${response.data.analysis.result.scatter}`
-          );
-          setTopStudents(
-            `data:image/png;base64,${response.data.analysis.result.top_students}`
-          );
-          setPieplot(
-            `data:image/png;base64,${response.data.analysis.result.pieplot}`
-          );
-
-          setfees_status(
-            `data:image/png;base64,${response.data.analysis.result.fees_status}`
-          );
-          setplacement_status(
-            `data:image/png;base64,${response.data.analysis.result.placement_status}`
-          );
-          setbranch_placement(
-            `data:image/png;base64,${response.data.analysis.result.branch_placement}`
-          );
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchCharts();
-  }, []);
+  const stats = [
+    {
+      title: "Average Attendance",
+      value: "84.2%",
+      icon: Activity,
+      color: "bg-blue-500",
+      trend: "+2.4%"
+    },
+    {
+      title: "Average Marks",
+      value: "76.5 / 100",
+      icon: Award,
+      color: "bg-purple-500",
+      trend: "+1.2%"
+    },
+    {
+      title: "Top Students count",
+      value: "4500",
+      icon: Users,
+      color: "bg-orange-500",
+      trend: "+120"
+    },
+    {
+      title: "Total Fees Collected",
+      value: "₹2.4 Cr",
+      icon: CircleDollarSign,
+      color: "bg-green-500",
+      trend: "+8%"
+    },
+    {
+      title: "Placement Rate",
+      value: "92%",
+      icon: Briefcase,
+      color: "bg-indigo-500",
+      trend: "+5.1%"
+    },
+    {
+      title: "Graduation Rate",
+      value: "98.5%",
+      icon: GraduationCap,
+      color: "bg-pink-500",
+      trend: "+0.5%"
+    }
+  ];
 
   return (
-    <div className="dashboard flex">
-      <div className=" bg-gray-100  w-[100%]">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-              Marks and Attendance Relation
-            </h2>
-            {scatter ? (
-              <img src={scatter} alt="Marks and Attendance Relation" className="w-full h-auto object-contain"/>
-            ) : (
-              <div className="flex justify-center items-center py-10">
-                <Loader className="animate-spin text-blue-500 h-10 w-10" />
-              </div>
-            )}
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-              Branchwise Student Distribution
-            </h2>
-            {pieplot ? (
-              <img className="w-full h-auto object-contain" src={pieplot} alt="Branchwise Student Distribution" />
-            ) : (
-              <div className="flex justify-center items-center py-10">
-                <Loader className="animate-spin text-blue-500 h-10 w-10" />
-              </div>
-            )}
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-              Attendance Overview
-            </h2>
-            {barplot1 ? (
-              <img src={barplot1} alt="Attendance Overview" className="w-full h-auto object-contain"/>
-            ) : (
-              <div className="flex justify-center items-center py-10">
-                <Loader className="animate-spin text-blue-500 h-10 w-10" />
-              </div>
-            )}
-          </div>
+    <div className="w-full bg-gray-50 min-h-screen p-6">
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">Analytics Overview</h2>
+        <p className="text-gray-500">Real-time performance metrics for UG & PG Programs.</p>
+      </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-              Marks Overview
-            </h2>
-            {barplot2 ? (
-              <img src={barplot2} alt="Marks Overview" className="w-full h-auto object-contain"/>
-            ) : (
-              <div className="flex justify-center items-center py-10">
-                <Loader className="animate-spin text-blue-500 h-10 w-10" />
-              </div>
-            )}
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {stats.map((stat, index) => (
+          <DataCard key={index} {...stat} />
+        ))}
+      </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-              Top Students
-            </h2>
-            {topStudents ? (
-              <img className="w-full h-auto object-contain" src={topStudents} alt="Top Students" />
-            ) : (
-              <div className="flex justify-center items-center py-10">
-                <Loader className="animate-spin text-gray-500 h-10 w-10" />
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <BarChart className="h-5 w-5 text-blue-500" />
+            Course Distribution
+          </h3>
+          <div className="space-y-4">
+            {[
+              { branch: "MBA / MCA", count: "1,450", percent: 40 },
+              { branch: "BBA / BCA", count: "1,100", percent: 30 },
+              { branch: "M.Sc / MA", count: "800", percent: 20 },
+              { branch: "B.Com", count: "350", percent: 10 }
+            ].map((item, idx) => (
+              <div key={idx}>
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-gray-600 font-medium">{item.branch}</span>
+                  <span className="text-gray-800 font-bold">{item.count}</span>
+                </div>
+                <div className="w-full bg-gray-100 rounded-full h-2">
+                  <div
+                    className="bg-blue-500 h-2 rounded-full transition-all duration-1000"
+                    style={{ width: `${item.percent}%` }}
+                  ></div>
+                </div>
               </div>
-            )}
+            ))}
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-              Fees Analysis
-            </h2>
-            {fees_status ? (
-              <img className="w-full h-auto object-contain" src={fees_status} alt="Fees Analysis" />
-            ) : (
-              <div className="flex justify-center items-center py-10">
-                <Loader className="animate-spin text-gray-500 h-10 w-10" />
+        </div>
+
+        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <TrendingUp className="h-5 w-5 text-green-500" />
+            Program Breakdown
+          </h3>
+          <div className="space-y-4">
+            {[
+              { status: "Post Graduate (5 Courses)", count: "MBA, MCA, MSc, MA", color: "bg-purple-500" },
+              { status: "Under Graduate (3 Courses)", count: "BBA, BCA, B.Com", color: "bg-blue-500" }
+            ].map((item, idx) => (
+              <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-gray-50">
+                <div className="flex items-center gap-3">
+                  <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
+                  <span className="text-sm text-gray-600 font-medium">{item.status}</span>
+                </div>
+                <span className="text-xs text-gray-500 font-bold">{item.count}</span>
               </div>
-            )}
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-              Branchwise Placement Analysis
-            </h2>
-            {branch_placement ? (
-              <img className="w-full h-auto object-contain" src={branch_placement} alt="Branchwise Placement Analysis" />
-            ) : (
-              <div className="flex justify-center items-center py-10">
-                <Loader className="animate-spin text-gray-500 h-10 w-10" />
-              </div>
-            )}
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-              Placement Analysis
-            </h2>
-            {placement_status ? (
-              <img className="w-full h-auto object-contain" src={placement_status} alt="Placement Analysis" />
-            ) : (
-              <div className="flex justify-center items-center py-10">
-                <Loader className="animate-spin text-gray-500 h-10 w-10" />
-              </div>
-            )}
+            ))}
           </div>
         </div>
       </div>

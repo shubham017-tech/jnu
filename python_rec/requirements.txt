@@ -8,3 +8,5 @@ seaborn
 scikit-learn
 pymongo
 groq
+sqlalchemy
+psycopg2-binary

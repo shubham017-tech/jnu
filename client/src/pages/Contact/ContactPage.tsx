@@ -4,16 +4,16 @@ import { Mail, Phone, MapPin, Clock, Send, ChevronDown } from 'lucide-react';
 import axios from 'axios'
 import faqData from './faqData.ts';
 import ServiceLayout from '../../layout/ServiceLayout.jsx';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
-interface FAQItemProps{
-  question:string;
-  answer:string;
+interface FAQItemProps {
+  question: string;
+  answer: string;
 }
 
-const FAQItem = ({ question, answer } : FAQItemProps ) => {
-  const [isOpen, setIsOpen] = useState <boolean> (false);
-  
+const FAQItem = ({ question, answer }: FAQItemProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
 
   return (
     <div className="border-b border-gray-700 py-6">
@@ -35,45 +35,45 @@ const FAQItem = ({ question, answer } : FAQItemProps ) => {
   );
 };
 
-interface formDataState{
-  fullName:string;
-  email:string;
-  description:string;
+interface formDataState {
+  fullName: string;
+  email: string;
+  description: string;
 }
 
 const ContactPage = () => {
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const [formData, setFormData] = useState<formDataState>({
-    fullName:'',
-    email:'',
-    description:'',
+    fullName: '',
+    email: '',
+    description: '',
   });
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try{
-      const response = await axios.post(`${backendURL}/api/feedback`,formData);
-      if(response.data.success){
+    try {
+      const response = await axios.post(`${backendURL}/api/feedback`, formData);
+      if (response.data.success) {
         toast.success(response.data.message);
-      
+
       }
-    }catch(error){
-      console.log("Some error occured on sending feedback to the admin",error);
-      if(error.response?.data?.message){
+    } catch (error) {
+      console.log("Some error occured on sending feedback to the admin", error);
+      if (error.response?.data?.message) {
         toast.error(error.response.data.message);
       }
 
-      else{
+      else {
         toast.error("Internal Server Error")
       }
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-     
+
 
     });
   };
@@ -106,7 +106,7 @@ const ContactPage = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-200">Email Us</h3>
-                  <p className="text-gray-400">support@smartedu.com</p>
+                  <p className="text-gray-400">info@jnujaipur.ac.in</p>
                 </div>
               </div>
             </div>
@@ -119,7 +119,8 @@ const ContactPage = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-200">Call Us</h3>
-                  <p className="text-gray-400">+1 (555) 123-4567</p>
+                  <p className="text-gray-400">Toll Free: 1800 102 1900</p>
+                  <p className="text-gray-400">Phone: 0141 3127028</p>
                 </div>
               </div>
             </div>
@@ -132,7 +133,7 @@ const ContactPage = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-200">Visit Us</h3>
-                  <p className="text-gray-400">123 Education Street, Tech Valley</p>
+                  <p className="text-gray-400">Jaipur-Agra Bypass, Near New RTO Office, Jagatpura, Jaipur-302017</p>
                 </div>
               </div>
             </div>
@@ -226,7 +227,7 @@ const ContactPage = () => {
         </div>
       </div>
 
-      
+
     </div>
   );
 };

@@ -30,7 +30,7 @@ const Navbar = () => {
       <div className="container mx-auto max-md:m-2 flex max-md:justify-between justify-around items-center">
         {/* Logo */}
         <div className="text-3xl ml-3 max-md:ml-0 max-md:text-3xl flex items-center gap-2 font-extrabold">
-          <img className="rounded-md object-cover   h-11" src="/logo/E.png" alt="" />
+          <img className="rounded-md object-cover h-11" src="/logo/jnu_logo.png" alt="Logo" />
           <Link className="text-gray-300" to="/">Jaipur National University</Link>
         </div>
 

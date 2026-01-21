@@ -22,9 +22,9 @@ import StatSection from "./components/StatSection";
 import ServiceSection from "./components/ServiceSection";
 import MissionSection from "./components/MissionSection";
 import JourneySection from "./components/JourneySection";
-import TeamSection from "./components/TeamSection";
 import ServiceLayout from "../../layout/ServiceLayout";
 import Hr from "../../constants/Hr";
+
 
 const AboutPage: React.FC = () => {
   return (
@@ -39,20 +39,18 @@ const AboutPage: React.FC = () => {
         <div className="relative z-10">
           <HeroSection />
           <StatSection />
-          
-          <Hr/>
-          
+
+          <Hr />
+
           <ServiceSection />
-          <Hr/>
+          <Hr />
           <MissionSection />
-          <Hr/>
+          <Hr />
 
           <JourneySection />
-          <Hr/>
 
-          <TeamSection />
-        
         </div>
+
       </div>
     </div>
   );

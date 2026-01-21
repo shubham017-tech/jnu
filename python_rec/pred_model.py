@@ -5,7 +5,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.metrics import accuracy_score,recall_score,f1_score
 import numpy as np
 import pandas as pd
-from pymongo import MongoClient
+from sqlalchemy import create_engine
 import os
 import sys
 import json
@@ -13,14 +13,22 @@ import json
 # Load .env only in development
 if os.getenv("ENV", "development") != "production":
     from dotenv import load_dotenv
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "..", "server", ".env"))
 
-mongo_URI = os.environ["MONGO_URI"]
-client = MongoClient(mongo_URI)
-db = client["test"]
-collection = db["demo"]
-cursor = collection.find()
-df = pd.DataFrame(list(cursor))
+db_host = os.getenv("DB_HOST")
+db_port = os.getenv("DB_PORT")
+db_user = os.getenv("DB_USERNAME")
+db_password = os.getenv("DB_PASSWORD")
+db_name = os.getenv("DB_NAME")
+
+engine = create_engine(f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}")
+
+df = pd.read_sql_table('student_marks_attendances', engine)
+
+# Map PostgreSQL columns to those expected by the model logic
+df = df.rename(columns={'marks': 'Adjusted Marks', 'attendance': 'Adjusted Attendance', 'branch': 'Branch'})
+# Note: In Sequelize models, branch is often lowercase. Ensuring it matches.
+df['Branch'] = df['branch'] if 'branch' in df.columns else df['Branch']
 def adjust_placement(row):
     if (
         row['Adjusted Marks'] >= 60 and

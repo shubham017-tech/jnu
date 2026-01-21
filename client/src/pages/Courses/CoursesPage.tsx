@@ -12,7 +12,7 @@ import degree4 from '../../assets/degree4.jpg';
 import './CoursesPage.css'
 
 
-const CoursesPage:React.FC = () => {
+const CoursesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
@@ -34,23 +34,23 @@ const CoursesPage:React.FC = () => {
       <div className="pt-24 pb-4 mt-10 px-6 ">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-7xl decoration-from-font font-extrabold text-gray-300 mt-2 ">
-            Professional Degree 
+            Professional Degree
           </h1>
           <span className='text-7xl decoration-from-font font-extrabold text-gray-300 block mb-5' >Programs</span>
           {/* <p className="text-lg text-gray-300">
             Shape your future with our comprehensive range of professional courses
           </p> */}
           <div className='flex justify-center' >
-          <div className='w-[80%] flex justify-center items-center' >
-          <img className='h-60 image-left' src={degree} alt="education degree" />
-          <img className='h-60 ' src={degree2} alt="education degree" />
-          <img className='h-60 ' src={degree4} alt="education degree" />
-          <img className='h-60 image-right ' src={degree3} alt="education degree" />
+            <div className='w-[80%] flex justify-center items-center' >
+              <img className='h-60 image-left' src={degree} alt="education degree" />
+              <img className='h-60 ' src={degree2} alt="education degree" />
+              <img className='h-60 ' src={degree4} alt="education degree" />
+              <img className='h-60 image-right ' src={degree3} alt="education degree" />
 
 
+            </div>
           </div>
-          </div>
-        
+
         </div>
       </div>
 
@@ -98,7 +98,7 @@ const CoursesPage:React.FC = () => {
                 {category.courses.map((course, idx) => (
                   <div
                     key={idx}
-                    className="bg-slate-900/50 backdrop-blur-sm rounded-xl border border-gray-700 shadow-2xl hover:shadow-violet-500/20 transition-all duration-300 p-8"
+                    className="bg-slate-900/50 backdrop-blur-sm rounded-xl border border-gray-700 shadow-2xl hover:shadow-violet-500/20 transition-all duration-300 p-8 flex flex-col"
                   >
                     <div className="mb-6">
                       <h3 className="text-2xl font-bold text-gray-200 mb-2">{course.name}</h3>
@@ -124,7 +124,7 @@ const CoursesPage:React.FC = () => {
                       </div>
                     </div>
 
-                    <button className="w-full mt-6 flex items-center justify-center gap-2 py-3 bg-violet-500 text-white rounded-lg hover:bg-violet-600 transition-all duration-300">
+                    <button className="w-full mt-auto flex items-center justify-center gap-2 py-3 bg-violet-500 text-white rounded-lg hover:bg-violet-600 transition-all duration-300">
                       <span>View Details</span>
                       <ArrowRight className="h-5 w-5" />
                     </button>
@@ -141,7 +141,7 @@ const CoursesPage:React.FC = () => {
         )}
       </div>
 
-     
+
     </div>
   );
 };

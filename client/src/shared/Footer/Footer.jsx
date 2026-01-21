@@ -26,8 +26,9 @@ import {
   MapPin,
   Facebook,
   Twitter,
-  Linkedin, // Changed from LinkedIn to Linkedin
-  Instagram
+  Linkedin,
+  Instagram,
+  Youtube // Added Youtube import
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -77,33 +78,38 @@ const Footer = () => {
               whileInView={{ opacity: 1, y: 0 }}
               className="flex items-center gap-3"
             >
-              <img className="h-12 w-auto rounded-lg" src="/logo/E.png" alt="Jaipur National University Logo" />
+              <img className="h-12 w-auto rounded-lg" src="/logo/jnu_logo.png" alt="Jaipur National University Logo" />
               <Link to="/" className="text-3xl font-bold text-gray-300 ">
                 Jaipur National University
               </Link>
             </motion.div>
 
             <ul className="space-y-4">
-              <FooterLink href="mailto:support@jnujaipur.com">
+              <FooterLink href="mailto:info@jnujaipur.ac.in">
                 <Mail className="h-5 w-5 text-indigo-400" />
-                support@jnujaipur.com
+                info@jnujaipur.ac.in
               </FooterLink>
-              <FooterLink href="tel:+91639886545">
+              <FooterLink href="tel:18001021900">
                 <Phone className="w-4 h-4" />
-                +91 63988 86545
+                Toll Free: 1800 102 1900
+              </FooterLink>
+              <FooterLink href="tel:01413127028">
+                <Phone className="w-4 h-4" />
+                Phone: 0141 3127028
               </FooterLink>
               <FooterLink href="#">
                 <MapPin className="w-4 h-4" />
-                123 Education Street, Tech Valley
+                Jaipur-Agra Bypass, Near New RTO Office, Jagatpura, Jaipur-302017
               </FooterLink>
             </ul>
 
             {/* Social Links */}
             <div className="flex gap-4">
-              <SocialButton Icon={Facebook} href="#" />
-              <SocialButton Icon={Twitter} href="#" />
-              <SocialButton Icon={Linkedin} href="#" />
-              <SocialButton Icon={Instagram} href="#" />
+              <SocialButton Icon={Facebook} href="https://www.facebook.com/jaipurnationaluniv" />
+              <SocialButton Icon={Twitter} href="https://x.com/jaipurjnu" />
+              <SocialButton Icon={Linkedin} href="https://www.linkedin.com/school/jaipurnationaluniversity/" />
+              <SocialButton Icon={Instagram} href="https://www.instagram.com/jnujaipuruniversity/" />
+              <SocialButton Icon={Youtube} href="https://www.youtube.com/channel/UC8KBt4ZO1h8mFoRGhROBb7A" />
             </div>
           </div>
 

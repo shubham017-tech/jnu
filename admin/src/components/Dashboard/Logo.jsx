@@ -19,8 +19,8 @@ limitations under the License.
 const Logo = () => {
   return (
     <div className="flex justify-center items-center gap-1"> {/* Removed styling classes and w-full */}
-      <img src="/logo/EduMatrix2.png" className="h-12  rounded-full object-contain" alt="EduMatrix Logo" /> {/* Increased height to h-14 */}
-      <p className="font-bold text-4xl text-white ">Jaipur National University</p> {/* Increased text size to text-2xl */}
+      <img src="/logo/jnu_logo.png" className="h-12  rounded-full object-contain" alt="Jaipur National University Logo" /> {/* Increased height to h-14 */}
+      <p className="font-bold text-2xl text-white ">Jaipur National University</p> {/* Increased text size to text-2xl */}
     </div>
   );
 };

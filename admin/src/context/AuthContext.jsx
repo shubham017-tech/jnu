@@ -13,10 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 import { useContext, createContext, useEffect, useState, useMemo } from "react";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 const AuthContext = createContext();
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -30,29 +31,40 @@ export const useAuth = () => {
 
 const AuthContextProvider = ({ children }) => {
     const [token, setToken] = useState("");
+    const [userRole, setUserRole] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         const localToken = localStorage.getItem("token");
         if (localToken) {
             setToken(localToken);
+            try {
+                const decodedToken = jwtDecode(localToken);
+                setUserRole(decodedToken.role);
+            } catch (error) {
+                console.error("Invalid token", error);
+                localStorage.removeItem("token");
+                setToken("");
+                setUserRole(null);
+            }
         }
-    }, []);
+    }, [token]);
 
-    const logout = async() => {
+    const logout = async () => {
         localStorage.removeItem("token");
         setToken("");
+        setUserRole(null);
 
         try {
-            const response = await axios.post(`${backendUrl}/api/v2/admin-logout`,{ },{
-                withCredentials:true
+            const response = await axios.post(`${backendUrl}/api/v2/admin-logout`, {}, {
+                withCredentials: true
             })
-            if(response.data.success){
-            toast.success(response.data.message);
-            navigate('/')
+            if (response.data.success) {
+                toast.success(response.data.message);
+                navigate('/')
             }
-        }catch(error){
-            console.log("Internal server error",error)
+        } catch (error) {
+            console.log("Internal server error", error)
         }
     };
 
@@ -60,10 +72,12 @@ const AuthContextProvider = ({ children }) => {
         () => ({
             token,
             setToken,
+            userRole,
+            setUserRole,
             isAuthenticated: !!token,
             logout,
         }),
-        [token]
+        [token, userRole]
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

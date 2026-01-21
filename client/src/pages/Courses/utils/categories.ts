@@ -19,16 +19,11 @@ limitations under the License.
 
 
 
-const categories : string[] = [
+const categories: string[] = [
     'All',
-    'Engineering',
-    'Management',
-    'Medical & Pharmacy',
-    'Science & Technology',
-    'Arts & Humanities',
-    'Law',
-    'Commerce'
-  ];
+    'Under Graduate',
+    'Post Graduate'
+];
 
 
-  export default categories;
+export default categories;

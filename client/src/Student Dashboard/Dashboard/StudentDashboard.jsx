@@ -12,15 +12,15 @@ const StudentDashboard = () => {
   ]
 
   const upcomingClasses = [
-    { id: 1, subject: 'Advanced Mathematics', time: '10:00 AM - 11:30 AM', date: 'Today', teacher: 'Dr. Johnson' },
-    { id: 2, subject: 'Computer Science', time: '01:00 PM - 02:30 PM', date: 'Today', teacher: 'Prof. Williams' },
-    { id: 3, subject: 'Physics Lab', time: '09:00 AM - 11:00 AM', date: 'Tomorrow', teacher: 'Dr. Maxwell' },
+    { id: 1, subject: 'M.Sc. Mathematics', time: '10:00 AM - 11:30 AM', date: 'Today', teacher: 'Dr. Johnson' },
+    { id: 2, subject: 'MCA', time: '01:00 PM - 02:30 PM', date: 'Today', teacher: 'Prof. Williams' },
+    { id: 3, subject: 'MA JMC', time: '09:00 AM - 11:00 AM', date: 'Tomorrow', teacher: 'Dr. Maxwell' },
   ]
   const courses = [
-    { id: 1, name: 'Advanced Mathematics', progress: 75, instructor: 'Dr. Johnson' },
-    { id: 2, name: 'Computer Science', progress: 60, instructor: 'Prof. Williams' },
-    { id: 3, name: 'Physics', progress: 80, instructor: 'Dr. Maxwell' },
-    { id: 4, name: 'Literature', progress: 45, instructor: 'Prof. Smith' },
+    { id: 1, name: 'M.Sc. Mathematics', progress: 75, instructor: 'Dr. Johnson' },
+    { id: 2, name: 'BCA', progress: 60, instructor: 'Prof. Williams' },
+    { id: 3, name: 'B.Com', progress: 80, instructor: 'Dr. Maxwell' },
+    { id: 4, name: 'MA English', progress: 45, instructor: 'Prof. Smith' },
   ]
 
   return (
@@ -29,12 +29,12 @@ const StudentDashboard = () => {
         <h1 className="text-4xl font-bold text-gray-800 mb-2">Student Dashboard</h1>
         <p className="text-gray-600 text-lg">Welcome back! Here&apos;s an overview of your academic progress.</p>
       </div>
-      
+
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat) => (
-          <div 
-            key={stat.id} 
+          <div
+            key={stat.id}
             className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden"
           >
             <div className="flex items-center p-6">
@@ -51,7 +51,7 @@ const StudentDashboard = () => {
           </div>
         ))}
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Upcoming Classes */}
         <div className="lg:col-span-2 space-y-8">
@@ -59,7 +59,7 @@ const StudentDashboard = () => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-gray-800 flex items-center">
-                  <FaCalendarAlt className="mr-3 text-blue-500" /> 
+                  <FaCalendarAlt className="mr-3 text-blue-500" />
                   Upcoming Classes
                 </h2>
                 <button className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors duration-300">
@@ -82,7 +82,7 @@ const StudentDashboard = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Course Cards */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-6">
@@ -94,8 +94,8 @@ const StudentDashboard = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {courses.map((course) => (
-                  <div 
-                    key={course.id} 
+                  <div
+                    key={course.id}
                     className="border border-gray-100 rounded-xl p-5 hover:shadow-lg transition-all duration-300 bg-white hover:border-blue-100"
                   >
                     <h3 className="font-semibold text-gray-800 text-lg mb-2">{course.name}</h3>
@@ -104,7 +104,7 @@ const StudentDashboard = () => {
                       Instructor: {course.instructor}
                     </p>
                     <div className="w-full bg-gray-100 rounded-full h-2.5 mb-2">
-                      <div 
+                      <div
                         className="bg-blue-500 h-2.5 rounded-full transition-all duration-500 ease-out"
                         style={{ width: `${course.progress}%` }}
                       ></div>
@@ -119,7 +119,7 @@ const StudentDashboard = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Right column can be added here for additional content */}
         <div className="hidden lg:block">
           {/* Additional content can be added here */}

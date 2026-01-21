@@ -18,25 +18,20 @@ limitations under the License.
 
 import React from 'react'
 import Sidebar from '../shared/Sidebar'
-import { RoleProvider } from "../context/RoleContext";
+const AppLayout = () => (WrapLayoutComponent) => {
+  return (props) => {
+    return (
+      <div className='flex  h-screen w-screen max-md:justify-center ' >
 
+        <Sidebar />
+        <div className='w-full md:ml-[20%] h-screen overflow-x-hidden  ' >
 
-const AppLayout = () => (WrapLayoutComponent)=> {
-    return (props)=>{
-        return (
-            <div  className='flex  h-screen w-screen max-md:justify-center ' >
-              <RoleProvider>
+          <WrapLayoutComponent {...props} />
+        </div>
+      </div>
+    )
+  }
 
-              <Sidebar />
-              </RoleProvider>
-              <div className='w-full md:ml-[20%] h-screen overflow-x-hidden  ' >
-
-              <WrapLayoutComponent {...props} />
-              </div>
-            </div>
-          )
-    }
- 
 }
 
 export default AppLayout

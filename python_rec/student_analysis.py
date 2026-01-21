@@ -4,24 +4,26 @@ import json
 import sys
 import numpy as np
 import pandas as pd
-from pymongo import MongoClient
+from sqlalchemy import create_engine
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 import seaborn as sns
 import os
 
-load_dotenv(dotenv_path='python_rec/.env')
+# Load .env from server directory as it contains the PG credentials
+load_dotenv(dotenv_path='server/.env')
 
-mongo_URI = os.getenv("MONGO_URI")
-client = MongoClient(f"{mongo_URI}")
-db = client["test"]
-collection1 = db["registrarfees"]
-collection2 = db["studentmarksattendances"]
-cursor1 = collection1.find()
-cursor2 = collection2.find()
-registrar = pd.DataFrame(list(cursor1))
-teacher= pd.DataFrame(list(cursor2))
-df=registrar.merge(teacher,on='RollNumber')
+db_host = os.getenv("DB_HOST")
+db_port = os.getenv("DB_PORT")
+db_user = os.getenv("DB_USERNAME")
+db_password = os.getenv("DB_PASSWORD")
+db_name = os.getenv("DB_NAME")
+
+engine = create_engine(f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}")
+
+registrar = pd.read_sql_table('registrarFees', engine)
+teacher = pd.read_sql_table('student_marks_attendances', engine)
+df = registrar.merge(teacher, on='RollNumber')
 
 def adjust_placement(row):
     if (
