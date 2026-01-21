@@ -109,6 +109,19 @@ app.get('/', (req, res) => {
 });
 
 
+// Global error handlers
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.error(err.name, err.message, err.stack);
+  // We don't exit immediately to allow logs to be captured, but in production
+  // you might want to use a process manager like PM2 to restart.
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.error(err.name, err.message, err.stack);
+});
+
 // Start server
 server.listen(process.env.PORT, () => {
   console.log(`Server is listening on port: ${process.env.PORT}`);

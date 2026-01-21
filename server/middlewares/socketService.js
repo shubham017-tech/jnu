@@ -68,127 +68,199 @@ const socketService = (io) => {
   const socketToEmailMapping = new Map();
 
   io.on("connection", (socket) => {
-    console.log(`User Connected : ${socket.id}`);
-    console.log("Auth object:", socket.handshake.auth);
-    console.log("Query params:", socket.handshake.query);
-    console.log("Cookies:", socket.handshake.headers.cookie);
+    try {
+      console.log(`User Connected : ${socket.id}`);
 
-    // Listen for the 'sendMessage' event from the client
-    socket.on("sendMessage", async (message) => {
-      console.log("Received message:", message);
-
-      try {
-        // Extract token using the helper function
-        const token = extractToken(socket);
-        
-        if (!token) {
-          console.error("No valid authentication token found");
-          socket.emit("messageError", { error: "Authentication failed. No valid token provided." });
-          return;
-        }
-
-        console.log("Found token:", token);
-
-        // Verify the token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("Decoded token:", decoded);
-
-        // Save message to the database
-        const newMessage = await Message.create({
-          sender: decoded.role,
-          content: message.content,
-          timestamp: new Date(),
-        });
-        console.log("Message saved to DB:", newMessage);
-
-        // Broadcast the message to all connected clients
-        socket.broadcast.emit("receiveMessage", {
-          sender: decoded.role,
-          content: message.content,
-          timestamp: new Date(),
-        });
-      } catch (error) {
-        console.error("Error sending the message:", error);
-        socket.emit("messageError", { error: "Failed to send message: " + error.message });
-      }
-    });
-
-    socket.on("join-room", (data) => {
-      const { roomId, emailId } = data;
-      console.log("User", emailId, "Joined Room", roomId);
-      emailToSocketMapping.set(emailId, socket.id);
-      socketToEmailMapping.set(socket.id, emailId);
-      socket.join(roomId);
-      socket.emit("joined-room", { roomId });
-      socket.broadcast.to(roomId).emit("user-joined", { emailId });
-    });
-    
-    socket.on("leave-room", (data) => {
-      const { roomId } = data;
-      const emailId = socketToEmailMapping.get(socket.id);
-      console.log("User", emailId, "Left Room", roomId);
-      
-      if (roomId && emailId) {
-        socket.leave(roomId);
-        socket.broadcast.to(roomId).emit("user-left", { emailId });
-      }
-    });
-  
-    socket.on('call-user', (data) => {
-      const { emailId, offer } = data;
-      const fromEmail = socketToEmailMapping.get(socket.id);
-      const socketId = emailToSocketMapping.get(emailId);
-      if (socketId) {
-        socket.to(socketId).emit('incomming-call', { from: fromEmail, offer });
-      }
-    });
-  
-    socket.on('call-accepted', (data) => {
-      const { emailId, ans } = data;
-      const socketId = emailToSocketMapping.get(emailId);
-      if (socketId) {
-        socket.to(socketId).emit('call-accepted', { ans });
-      }
-    });
-  
-    socket.on('ice-candidate', (data) => {
-      const { candidate, to } = data;
-      const socketId = emailToSocketMapping.get(to);
-      if (socketId) {
-        socket.to(socketId).emit('ice-candidate', { candidate });
-      }
-    });
-  
-    socket.on('renegotiate', (data) => {
-      const { offer, to } = data;
-      const socketId = emailToSocketMapping.get(to);
-      if (socketId) {
-        socket.to(socketId).emit('renegotiate', { offer });
-      }
-    });
-
-    // Handle disconnection
-    socket.on("disconnect", () => {
-      console.log(`User disconnected: ${socket.id}`);
-      
-      // Get the email of the disconnected user
-      const emailId = socketToEmailMapping.get(socket.id);
-      
-      if (emailId) {
-        console.log(`User ${emailId} disconnected`);
-        
-        // Clean up maps
-        socketToEmailMapping.delete(socket.id);
-        emailToSocketMapping.delete(emailId);
-        
-        // Notify other users in all rooms this socket was part of
-        socket.rooms.forEach(roomId => {
-          if (roomId !== socket.id) { // Skip the default room (socket.id)
-            socket.to(roomId).emit("user-left", { emailId });
+      // Listen for the 'sendMessage' event from the client
+      socket.on("sendMessage", async (message) => {
+        try {
+          if (!message || !message.content) {
+            console.warn("Received empty or malformed message:", message);
+            return;
           }
-        });
-      }
-    });
+          console.log("Received message:", message);
+
+          // Extract token using the helper function
+          const token = extractToken(socket);
+
+          if (!token) {
+            console.error("No valid authentication token found");
+            socket.emit("messageError", { error: "Authentication failed. No valid token provided." });
+            return;
+          }
+
+          // Verify the token
+          let decoded;
+          try {
+            decoded = jwt.verify(token, process.env.JWT_SECRET);
+          } catch (jwtError) {
+            console.error("JWT Verification failed during sendMessage:", jwtError.message);
+            socket.emit("messageError", { error: "Token verification failed." });
+            return;
+          }
+
+          // Save message to the database
+          const newMessage = await Message.create({
+            sender: decoded.role || 'unknown',
+            content: message.content,
+            timestamp: new Date(),
+          });
+          console.log("Message saved to DB:", newMessage.id);
+
+          // Broadcast the message to all connected clients
+          socket.broadcast.emit("receiveMessage", {
+            sender: decoded.role || 'unknown',
+            content: message.content,
+            timestamp: new Date(),
+          });
+        } catch (error) {
+          console.error("Error handling sendMessage:", error);
+          socket.emit("messageError", { error: "Failed to handle message." });
+        }
+      });
+
+      socket.on("join-room", (data) => {
+        try {
+          if (!data || !data.roomId || !data.emailId) {
+            console.warn("Invalid data for join-room:", data);
+            return;
+          }
+          const { roomId, emailId } = data;
+          console.log("User", emailId, "Joined Room", roomId);
+          emailToSocketMapping.set(emailId, socket.id);
+          socketToEmailMapping.set(socket.id, emailId);
+          socket.join(roomId);
+          socket.emit("joined-room", { roomId });
+          socket.broadcast.to(roomId).emit("user-joined", { emailId });
+        } catch (err) {
+          console.error("Error in join-room handler:", err);
+        }
+      });
+
+      socket.on("leave-room", (data) => {
+        try {
+          if (!data || !data.roomId) {
+            console.warn("Invalid data for leave-room:", data);
+            return;
+          }
+          const { roomId } = data;
+          const emailId = socketToEmailMapping.get(socket.id);
+          console.log("User", emailId, "Left Room", roomId);
+
+          if (roomId && emailId) {
+            socket.leave(roomId);
+            socket.broadcast.to(roomId).emit("user-left", { emailId });
+          }
+        } catch (err) {
+          console.error("Error in leave-room handler:", err);
+        }
+      });
+
+      socket.on('call-user', (data) => {
+        try {
+          if (!data || !data.emailId || !data.offer) {
+            console.warn("Invalid data for call-user:", data);
+            return;
+          }
+          const { emailId, offer } = data;
+          const fromEmail = socketToEmailMapping.get(socket.id);
+          const socketId = emailToSocketMapping.get(emailId);
+          if (socketId) {
+            socket.to(socketId).emit('incomming-call', { from: fromEmail, offer });
+          }
+        } catch (err) {
+          console.error("Error in call-user handler:", err);
+        }
+      });
+
+      socket.on('call-accepted', (data) => {
+        try {
+          if (!data || !data.emailId || !data.ans) {
+            console.warn("Invalid data for call-accepted:", data);
+            return;
+          }
+          const { emailId, ans } = data;
+          const socketId = emailToSocketMapping.get(emailId);
+          if (socketId) {
+            socket.to(socketId).emit('call-accepted', { ans });
+          }
+        } catch (err) {
+          console.error("Error in call-accepted handler:", err);
+        }
+      });
+
+      socket.on('ice-candidate', (data) => {
+        try {
+          if (!data || !data.to || !data.candidate) {
+            console.warn("Invalid data for ice-candidate:", data);
+            return;
+          }
+          const { candidate, to } = data;
+          const socketId = emailToSocketMapping.get(to);
+          if (socketId) {
+            socket.to(socketId).emit('ice-candidate', { candidate });
+          }
+        } catch (err) {
+          console.error("Error in ice-candidate handler:", err);
+        }
+      });
+
+      socket.on('renegotiate', (data) => {
+        try {
+          if (!data || !data.to || !data.offer) {
+            console.warn("Invalid data for renegotiate:", data);
+            return;
+          }
+          const { offer, to } = data;
+          const socketId = emailToSocketMapping.get(to);
+          if (socketId) {
+            socket.to(socketId).emit('renegotiate', { offer });
+          }
+        } catch (err) {
+          console.error("Error in renegotiate handler:", err);
+        }
+      });
+
+      // Handle disconnection
+      socket.on("disconnect", () => {
+        try {
+          console.log(`User disconnected: ${socket.id}`);
+
+          // Get the email of the disconnected user
+          const emailId = socketToEmailMapping.get(socket.id);
+
+          if (emailId) {
+            console.log(`User ${emailId} disconnected`);
+
+            // Clean up maps
+            socketToEmailMapping.delete(socket.id);
+            emailToSocketMapping.delete(emailId);
+
+            // Notify other users in all rooms this socket was part of
+            if (socket.rooms && typeof socket.rooms.forEach === 'function') {
+              socket.rooms.forEach(roomId => {
+                if (roomId !== socket.id) { // Skip the default room (socket.id)
+                  socket.to(roomId).emit("user-left", { emailId });
+                }
+              });
+            }
+          }
+        } catch (err) {
+          console.error("Error in disconnect handler:", err);
+        }
+      });
+
+      socket.on("error", (err) => {
+        console.error(`Socket error for ${socket.id}:`, err);
+      });
+
+    } catch (connectionErr) {
+      console.error("Error during socket connection ritual:", connectionErr);
+    }
+  });
+
+  io.on("error", (err) => {
+    console.error("Global IO error:", err);
   });
 };
 

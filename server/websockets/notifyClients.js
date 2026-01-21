@@ -22,11 +22,15 @@ const initNotify = (io) => {
 };
 
 const notifyClients = (quiz) => {
-  if (ioInstance) {
-    ioInstance.emit('newQuiz', quiz);
-    console.log('Notified clients via Socket.io about new quiz');
-  } else {
-    console.warn('notifyClients called before ioInstance was initialized');
+  try {
+    if (ioInstance) {
+      ioInstance.emit('newQuiz', quiz);
+      console.log('Notified clients via Socket.io about new quiz');
+    } else {
+      console.warn('notifyClients called before ioInstance was initialized');
+    }
+  } catch (error) {
+    console.error('Error in notifyClients:', error);
   }
 };
 
